@@ -10,7 +10,7 @@ def parse_args() -> Namespace:
     args = ArgumentParser(description='Get company ratings from Glassdoor and others')
     args.add_argument('-c', '--config', help='Path to config file', default='config.yaml')
     args.add_argument('-l', '--list', help='Path to list of companies', default='companies.yaml')
-    args.add_argument('-o', '--output', help='Output format [print, yaml, csv]', default='print')
+    args.add_argument('-o', '--output', help='Output format [print, yaml, csv, txt]', default='print')
     return args.parse_args()
 
 

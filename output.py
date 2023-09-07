@@ -36,6 +36,15 @@ class CSV(Renderer):
         return
 
 
+class TXT(Renderer):
+
+    def Render(self, data: dict) -> None:
+        with open('output.txt', 'w+') as f:
+            for k, v in data.items():
+                f.write(f'{v}\n')
+        return
+
+
 def OutputFactory(method: str):
     if method == 'print':
         return Print()
@@ -43,5 +52,7 @@ def OutputFactory(method: str):
         return YAML()
     elif method == 'csv':
         return CSV()
+    elif method == 'txt':
+        return TXT()
     else:
         return Renderer
