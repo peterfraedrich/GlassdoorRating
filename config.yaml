@@ -1,0 +1,5 @@
+rating_source: glassdoor
+
+glassdoor:
+  url: https://www.glassdoor.com/Search/results.htm?&locId=1&locT=N&locName=United%20States
+  query_key: keyword
