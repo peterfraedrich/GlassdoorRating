@@ -1,3 +1,5 @@
+<image src="gd10.png" width="500px">
+
 # GlassdoorRating
 
 This repo is a small CLI tool that takes a list of companies (`companies.yaml`) and gets their GlassDoor rating. I created this as a tool for job hunting; my job tracking spreadsheet has a place for Glassdoor rating and I wanted a faster way to get them without having to manually search each company in a browser.
