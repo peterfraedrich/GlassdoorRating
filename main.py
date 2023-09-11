@@ -24,7 +24,7 @@ def main() -> None:
     args = parse_args()
     config = load_file(args.config)
     companies = load_file(args.list)
-    rating_scraper = scraper.ScraperFactory(config['rating_source'])
+    rating_scraper = scraper.ScraperFactory(config['rating_source'], config)
     ouptut_renderer = output.OutputFactory(args.output.lower())
     results = {}
     for c in companies:

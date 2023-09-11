@@ -1,3 +1,9 @@
+user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+api_token: "233203"
+api_key: "jrTfWk5uhyu"
+pause_seconds: 2
+company_comparison_threshold: 70
+
 rating_source: glassdoor
 
 glassdoor:
