@@ -27,6 +27,7 @@ optional arguments:
 
 ## TODO
 Not really sure there's going to be futher iteration on this, but if I had to:
+- Optional use of `stdin` for companies instead of yaml file
 - Get my own API creds
-- Tighten up the config stuff; there's some "magic params" in `scrape.py` that could be config-ized
+- ~Tighten up the config stuff; there's some "magic params" in `scrape.py` that could be config-ized~
 - Testing
