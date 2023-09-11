@@ -1,18 +1,6 @@
 import time
 import requests
-import random
-
-PAUSE_SEC = 1
-
-user_agents = [
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15'
-]
+from thefuzz import fuzz
 
 
 class Scraper:
@@ -25,6 +13,23 @@ class Scraper:
 
 class Glassdoor(Scraper):
     public_ip = None
+    user_agent = None
+    api_token = None
+    api_key = None
+    pause_seconds = 2
+    headers = {}
+    self_ip_uri = 'https://ident.me'
+    fuzz_threshold = 75
+
+    def __init__(self, config: dict):
+        self.public_ip = self._my_ip()
+        self.user_agent = config.get('user_agent')
+        self.api_token = config.get('api_token')
+        self.api_key = config.get('api_key')
+        self.headers = self.headers.update(config.get('headers', {}))
+        self.self_ip_uri = config.get('self_ip_uri', 'https://ident.me')
+        self.fuzz_threshold = config.get('company_comparison_threshold', 75)
+        return
 
     def _my_ip(self):
         if self.public_ip:
@@ -34,20 +39,20 @@ class Glassdoor(Scraper):
         return self.public_ip
 
     def get_rating(self, company: str, url: str, query_key: str, **kwargs):
-        time.sleep(PAUSE_SEC)
+        time.sleep(self.pause_seconds)
         p = {
             'action': 'employers',
             'q': company,
             'format': 'json',
             'v': '1',
-            'useragent': user_agents[0],
-            't.p': "233203",
-            't.k': "jrTfWk5uhyu",
-            'userip': self._my_ip(),
+            'useragent': self.user_agent,
+            't.p': self.api_token,
+            't.k': self.api_key,
+            'userip': self.public_ip,
         }
         h = {
             'Content-Type': 'application/json',
-            'User-Agent': user_agents[0]
+            'User-Agent': self.user_agent
         }
         res = requests.get(url='http://api.glassdoor.com/api/api.htm', params=p, headers=h)
         if res.status_code >= 305:
@@ -56,13 +61,14 @@ class Glassdoor(Scraper):
         data = res.json()
         company_list = data['response'].get('employers')
         for c in company_list:
-            if c.get('name').lower() == company.lower():
+            ratio = fuzz.ratio(c.get('name').lower(), company.lower())
+            if ratio >= self.fuzz_threshold:
                 return c.get('overallRating', 'n/a')
         return 'n/a'
 
 
-def ScraperFactory(t: str):
+def ScraperFactory(t: str, config: dict):
     if t.lower() == 'glassdoor':
-        return Glassdoor()
+        return Glassdoor(config)
     else:
-        return Scraper()
+        return Scraper(config)
