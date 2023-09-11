@@ -1,11 +1,15 @@
+# user agent to use for the API call; needs to be something somewhat 'real'
 user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+
+# Glassdoor API creds
 api_token: "233203"
 api_key: "jrTfWk5uhyu"
+
+# number of seconds before each API call; I don't recommend going lower than 2 because of rate limiting
 pause_seconds: 2
+
+# % that company names have to match in order to get rating
 company_comparison_threshold: 70
 
+# where the ratings come from; Glassdoor is the only one supported right now
 rating_source: glassdoor
-
-glassdoor:
-  url: https://www.glassdoor.com/Search/results.htm?&locId=1&locT=N&locName=United%20States
-  query_key: keyword
